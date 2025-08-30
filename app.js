@@ -7,6 +7,7 @@ require("dotenv").config({ path: "./config.env" });
 
 // Import routes
 const authRoutes = require("./src/routes/auth");
+const eventRoutes = require("./src/routes/events");
 
 // Import middleware
 const errorHandler = require("./src/middlewares/errorHandler");
@@ -39,14 +40,15 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// Routes (only auth)
+// Routes (only auth + events)
 app.use("/api/auth", authRoutes);
+app.use("/api/events", eventRoutes);
 
 // Health check endpoint
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "success",
-    message: "Auth service is running",
+    message: "Auth & Event service is running",
     timestamp: new Date().toISOString(),
   });
 });
@@ -65,7 +67,7 @@ app.use("*", (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Auth service running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV}`);
 });
 
